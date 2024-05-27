@@ -21,49 +21,60 @@ import RoomsList from "./modules/RoomsModule/components/RoomsList/RoomsList";
 import BookingProcess from "./modules/BookingProcessModule/components/BookingProcess/BookingProcess";
 import BookingDone from "./modules/BookingProcessModule/components/BookingDone/BookingDone";
 import AdsList from "./modules/AdsModule/components/AdsList/AdsList";
-
+// For MUI Dark Mode
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { ColorModeContext, useMode } from "./modules/SharedModule/Mode/Mode";
 function App() {
- 
+  const [theme, colorMode] = useMode();
   const routers = createBrowserRouter([
     {
       path: "/",
       element: <AuthLayout />,
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <HomePage/> },
-        { path: "login", element: <Login/> },
+        { index: true, element: <HomePage /> },
+        { path: "login", element: <Login /> },
         { path: "register", element: <Register /> },
         { path: "forget-pass", element: <ForgetPass /> },
         { path: "reset-pass", element: <ResetPass /> },
-        { path: "change-pass", element: <ChangePass /> },
-      ],
+        { path: "change-pass", element: <ChangePass /> }
+      ]
     },
     {
       path: "dashboard",
       element: (
-        <ProtectedRoute >
+        <ProtectedRoute>
           <MasterLayout />
         </ProtectedRoute>
       ),
       errorElement: <NotFound />,
       children: [
         { index: true, element: <Dashboard /> },
-        { path: "home", element: <HomePage/> },
-        { path: "page-details", element: <PageDetails/> },
-        { path: "explore-rooms", element: <ExploreRooms/> },
-        { path: "favorites", element: <Favs/> },
-        { path: "ads", element: <AdsList/> },
-        { path: "booking-process", element: <BookingProcess/> },
-        { path: "booking-done", element: <BookingDone/> },
+        { path: "home", element: <HomePage /> },
+        { path: "page-details", element: <PageDetails /> },
+        { path: "explore-rooms", element: <ExploreRooms /> },
+        { path: "favorites", element: <Favs /> },
+        { path: "ads", element: <AdsList /> },
+        { path: "booking-process", element: <BookingProcess /> },
+        { path: "booking-done", element: <BookingDone /> },
         { path: "booking-list", element: <BookingList /> },
         { path: "facilities", element: <FacilitiesList /> },
         { path: "rooms", element: <RoomsList /> },
-        { path: "users", element: <UsersList /> },
-      ],
-    },
+        { path: "users", element: <UsersList /> }
+      ]
+    }
   ]);
 
-  return <RouterProvider router={routers} />;
+  return (
+    <>
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <RouterProvider router={routers} />
+        </ThemeProvider>
+      </ColorModeContext.Provider>
+    </>
+  );
 }
 
 export default App;
