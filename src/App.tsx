@@ -24,6 +24,7 @@ import AdsList from "./modules/AdsModule/components/AdsList/AdsList";
 // For MUI Dark Mode
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from "./modules/SharedModule/Mode/Mode";
+import { ToastContainer } from 'react-toastify';
 function App() {
   const [theme, colorMode] = useMode();
   const routers = createBrowserRouter([
@@ -71,6 +72,7 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <RouterProvider router={routers} />
+          <ToastContainer/>
         </ThemeProvider>
       </ColorModeContext.Provider>
     </>
