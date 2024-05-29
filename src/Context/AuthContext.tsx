@@ -14,7 +14,7 @@ export const AuthContext = createContext<AuthForContext>({
 
 export default function AuthContextProvider(props: PropsWithChildren) {
   const [loginData, setLoginData] = useState<DecodedToken | null>(null);
-  const baseUrl = "https://upskilling-egypt.com:3003/api/v1";
+  const baseUrl = "https://upskilling-egypt.com:3000";
   const requestHeaders = {
     Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
   };
