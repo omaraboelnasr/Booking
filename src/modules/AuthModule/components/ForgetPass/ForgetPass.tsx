@@ -7,10 +7,10 @@ import {
   TextField,
   Button,
   Typography,
-  Box,
   Grid,
   Container
 } from "@mui/material";
+import { Box } from '@mui/material';
 import axios from "axios";
 import forgotImage from "../../../../assets/Group 33.png";
 import IconDarkLightMode from "../../../../modules/SharedModule/Mode/IconDarkLightMode";

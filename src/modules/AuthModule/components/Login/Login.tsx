@@ -1,7 +1,7 @@
 
 
 import React, { useContext } from "react";
-import Box from "@mui/material/Box";
+import { Box } from '@mui/material';
 import Grid from "@mui/material/Grid";
 import "./Login.css";
 import img from "../../../../assets/login.png";

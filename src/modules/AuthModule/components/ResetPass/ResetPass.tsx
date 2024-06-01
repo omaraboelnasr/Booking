@@ -2,7 +2,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import React, { useContext, useState } from 'react'
 import { Stack, Typography, TextField, IconButton, OutlinedInput, InputLabel, InputAdornment } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
-import Box from '@mui/material/Box';
+import { Box } from '@mui/material';
 import Container from '@mui/material/Container';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
