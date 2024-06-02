@@ -84,6 +84,7 @@ export default function Login() {
                   }}
                   label="Email Address"
                   placeholder="Please Type Here"
+                  
                  {...register('email' , {required:validateEmail.required ,   pattern: {
                           value: validateEmail.pattern.value,
                           message: validateEmail.pattern.message,
@@ -109,8 +110,8 @@ export default function Login() {
                {errors.password && <Alert icon={<Error fontSize="inherit" />} severity="error">
                  {errors.password.message}
                  </Alert>}
-                <Link className="forget-link" to={'/forget-pass'}>Forgot Password ?</Link>
-                <Button variant="contained" type="submit" sx={{marginY:'25px' , width:'100%'}} disabled={!isDirty || !isValid}>Login</Button>
+                <Link className="forget-link" to={'/forget-password'}>Forgot Password ?</Link>
+                <Button variant="contained" type="submit" sx={{marginY:3 , width:'100%'}} disabled={!isDirty || !isValid}>Login</Button>
               </Box>
             </Grid>
         </Grid>

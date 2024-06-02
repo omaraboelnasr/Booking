@@ -1,6 +1,6 @@
 import styles from "./ForgotPassword.module.css";
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import {
@@ -15,10 +15,12 @@ import axios from "axios";
 import forgotImage from "../../../../assets/Group 33.png";
 import IconDarkLightMode from "../../../../modules/SharedModule/Mode/IconDarkLightMode";
 import { toast } from "react-toastify";
+import { AuthContext } from "../../../../Context/AuthContext";
 
 export default function ForgetPass() {
-  // const { baseUrl} = useContext(AuthContext);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { baseUrl } = useContext(AuthContext);
+
+  const [isSubmitting, setisSubmitting] = useState<boolean>(false);
   const navigate = useNavigate();
   type FormValues = {
     email: string;
@@ -31,17 +33,17 @@ export default function ForgetPass() {
 
   const onSubmit: SubmitHandler<FormValues> = async (data) => {
     try {
-      setIsLoading(true);
+      setisSubmitting(true);
       const response = await axios.post(
-        `https://upskilling-egypt.com:3000/api/v0/admin/users/forgot-password`,
+        `${baseUrl}/api/v0/admin/users/forgot-password`,
         data
       );
-      navigate("/reset-pass");
+      navigate("/reset-password");
       toast.success("Mail send please check inbox !");
     } catch (error) {
       toast.error(error?.response.data.message || "There's a mistake.");
     } finally {
-      setIsLoading(false);
+      setisSubmitting(false);
     }
   };
 
@@ -152,7 +154,7 @@ export default function ForgetPass() {
                     sx={{
                       marginTop: 1,
                       marginBottom: 1,
-                      bgcolor: "#f5f6f88f"
+                      bgcolor: "rgba(245, 246, 248, 1)"
                     }}
                     type="email"
                     id="email"
@@ -179,7 +181,7 @@ export default function ForgetPass() {
                 </Box>
 
                 <Button
-                  disabled={isLoading}
+                  disabled={isSubmitting}
                   sx={{
                     paddingY: 2,
                     marginTop: 5,
@@ -189,7 +191,7 @@ export default function ForgetPass() {
                   type="submit"
                   variant="contained"
                 >
-                  {isLoading ? (
+                  {isSubmitting ? (
                     <span className={styles.loader}></span>
                   ) : (
                     "Send mail"

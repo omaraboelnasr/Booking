@@ -36,8 +36,8 @@ function App() {
         { index: true, element: <HomePage /> },
         { path: "login", element: <Login /> },
         { path: "register", element: <Register /> },
-        { path: "forget-pass", element: <ForgetPass /> },
-        { path: "reset-pass", element: <ResetPass /> },
+        { path: "forget-password", element: <ForgetPass /> },
+        { path: "reset-password", element: <ResetPass /> },
         { path: "change-pass", element: <ChangePass /> }
       ]
     },

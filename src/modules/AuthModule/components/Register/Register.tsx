@@ -17,8 +17,8 @@ import 'react-toastify/dist/ReactToastify.css';
 
 
 import axios from "axios";
-import singupImage from "../../../../assets/signup1.jpg";
 
+import singupImg from "../../../../assets/registerImg.png";
 
 import './Register.css'
 import { Link, useNavigate } from 'react-router-dom';
@@ -95,7 +95,6 @@ const appendToFormData=(data:FormValues)=>{
 
      <Box  height="100vh" sx={{display:{xs:"block",md:"flex"},margin:"auto"}} alignItems="center" >
        <Box display="flex">
-       
        <Box width="100%" marginRight="5px">
         
        <Box>
@@ -117,11 +116,11 @@ const appendToFormData=(data:FormValues)=>{
 
        <Box component="form" width="80%" onSubmit={handleSubmit(onSubmit)}> 
          <Stack>
-           <label htmlFor="userName" style={{ fontSize: "1.3rem", fontWeight: 300, opacity: 0.8 }}>User Name</label>
+         <InputLabel htmlFor="userName" style={{ color:'rgba(21, 44, 91, 1)',fontSize: "1.1rem", fontWeight: 400, marginBottom: 6}}>User Name</InputLabel>
             <TextField type="text" sx={{
-                   
+              border:'none',
               marginBottom: 1,
-              bgcolor: "#f5f6f88f"
+              bgcolor: "rgba(245, 246, 248, 1)"
             }}  id="userName" placeholder="Please type here ..." {...register("userName",{required:"User Name is Required",minLenth:3,maxLength:10
          
           })}></TextField>
@@ -133,13 +132,13 @@ const appendToFormData=(data:FormValues)=>{
       
          <Box  sx={{display:"flex",justifyContent:'space-between',flexDirection:{xs:"column",md:"row"}}}>
          <Stack my="5px" mr="5px" >
-         <label htmlFor="phoneNumber" style={{ fontSize: "1.2rem", fontWeight: 300, opacity: 0.8 }}>Phone Number</label>
+         <InputLabel htmlFor="phoneNumber" style={{ color:'rgba(21, 44, 91, 1)',fontSize: "1.1rem", fontWeight: 400, marginBottom: 6}}>Phone Number</InputLabel>
+
          <Stack>
        
          <TextField  type="tel" sx={{
-                  
           marginBottom: 1,
-          bgcolor: "#f5f6f88f"
+          bgcolor: "rgba(245, 246, 248, 1)"
         }} id="phoneNumber" placeholder="Please type here ..." {...register("phoneNumber",{required:"Phone Number is Required"
          
         })}></TextField>
@@ -150,13 +149,13 @@ const appendToFormData=(data:FormValues)=>{
         )}
         </Stack>
          <Stack my="5px" mr="5px" >
-         <label htmlFor="country"  style={{ fontSize: "1.2rem", fontWeight: 300, opacity: 0.8 }}>Country</label>
+         <InputLabel htmlFor="country" style={{ color:'rgba(21, 44, 91, 1)',fontSize: "1.1rem", fontWeight: 400, marginBottom: 6}}>Country</InputLabel>
          <Stack>
         
          <TextField type="text" sx={{
                    
           marginBottom: 1,
-          bgcolor: "#f5f6f88f"
+          bgcolor: "rgba(245, 246, 248, 1)"
         }} id="country" placeholder="Please type here ..." {...register("country",{required:"Country is Required",minLenth:3,maxLength:10
          
         })}></TextField>
@@ -164,20 +163,17 @@ const appendToFormData=(data:FormValues)=>{
         {errors.country && errors.country.type  && (
           <Typography color="error" sx={{
                      marginBottom: 1,
-                    bgcolor: "#f5f6f88f"
-                  }}>{errors.country.message}</Typography>
+                     bgcolor: "rgba(245, 246, 248, 1)"
+                    }}>{errors.country.message}</Typography>
         )}
         </Stack>
         </Box>
         <Stack>
-       
-        <label  htmlFor="email"   style={{ fontSize: "1.3rem", fontWeight: 300, opacity: 0.8 ,}}>
-                    Email Address
-                </label>
+        <InputLabel htmlFor="email"  style={{ color:'rgba(21, 44, 91, 1)',fontSize: "1.1rem", fontWeight: 400, marginBottom: 6}}>Email Address</InputLabel>
                 <TextField   sx={{
                    
                     marginBottom: 1,
-                    bgcolor: "#f5f6f88f"
+                    bgcolor: "rgba(245, 246, 248, 1)"
                   }}
                   type="email"
                   id="email"
@@ -200,11 +196,7 @@ const appendToFormData=(data:FormValues)=>{
                 )}
 
         <Stack>
-       
-        <label  htmlFor="password"   style={{ fontSize: "1.3rem", fontWeight: 300, opacity: 0.8 ,}}>
-        Password
-                </label>
-
+        <InputLabel htmlFor="password"  style={{ color:'rgba(21, 44, 91, 1)',fontSize: "1.1rem", fontWeight: 400, marginBottom: 6}}>Password</InputLabel>
                 <OutlinedInput
                  
                 type={showPassword? 'text' : 'password'}
@@ -213,7 +205,7 @@ const appendToFormData=(data:FormValues)=>{
                 sx={{
                  
                   marginBottom: 1,
-                  bgcolor: "#f5f6f88f"
+                  bgcolor: "rgba(245, 246, 248, 1)"
                 }}
                 {...register("password", {
                   required: "Password is required",
@@ -238,10 +230,7 @@ const appendToFormData=(data:FormValues)=>{
                   <Typography color="error">{errors.password.message}</Typography>
                 )}
         <Stack>
-       
-        <label  htmlFor="confirmPassword"   style={{ fontSize: "1.3rem", fontWeight: 300, opacity: 0.8 ,}}>
-       Confirm Password
-                </label>
+        <InputLabel htmlFor="confirmPassword"  style={{ color:'rgba(21, 44, 91, 1)',fontSize: "1.1rem", fontWeight: 400, marginBottom: 6}}>Confirm Password</InputLabel>
                 <OutlinedInput
                  
                 type={showConfPassword? 'text' : 'password'}
@@ -250,7 +239,7 @@ const appendToFormData=(data:FormValues)=>{
                 sx={{
                  
                   marginBottom: 1,
-                  bgcolor: "#f5f6f88f"
+                  bgcolor: "rgba(245, 246, 248, 1)"
                 }}
                 {...register("confirmPassword", {
                   required: "Confirm Password is required",
@@ -299,7 +288,7 @@ const appendToFormData=(data:FormValues)=>{
        </Box>
      
        </Box>
-       <Box  sx={{ display: { xs:"none",sm: "none", md:"block" } }}> <img src={singupImage} alt="signup" className="singupImage"  /> </Box>
+       <Box > <img src={singupImg} alt="signup" className="singupImage"  /> </Box>
        </Box>
      </Box>
  

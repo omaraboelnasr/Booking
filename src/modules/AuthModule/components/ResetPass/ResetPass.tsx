@@ -66,14 +66,12 @@ export default function ResetPass() {
             </Box>
 
             <Box component="form" width="80%" onSubmit={handleSubmit(onSubmit)}>
-
+            
               <Stack>
-                <label htmlFor="email" style={{ fontSize: "1.3rem", fontWeight: 300, opacity: 0.8, marginBottom: 6 }}>
-                  Email Address
-                </label>
+              <InputLabel htmlFor="email" style={{ color:'rgba(21, 44, 91, 1)',fontSize: "1.1rem", fontWeight: 400, marginBottom: 6}}>Email Address</InputLabel>
                 <TextField sx={{
                   marginBottom: 1,
-                  bgcolor: "#f5f6f88f"
+                  bgcolor: "rgba(245, 246, 248, 1)"
                 }}
                   type="email"
                   id="email"
@@ -96,16 +94,14 @@ export default function ResetPass() {
 
 
               <Stack>
-                <label htmlFor="otp" style={{ fontSize: "1.3rem", fontWeight: 300, opacity: 0.8, marginBottom: 6 }}>
-                  OTP
-                </label>
+              <InputLabel htmlFor="otp" style={{ color:'rgba(21, 44, 91, 1)',fontSize: "1.1rem", fontWeight: 400, marginBottom: 6}}>OTP</InputLabel>
                 <OutlinedInput
                   type='text'
                   id="otp"
                   placeholder="Please type here ..."
                   sx={{
                     marginBottom: 1,
-                    bgcolor: "#f5f6f88f"
+                    bgcolor: "rgba(245, 246, 248, 1)"
                   }}
                   {...register("seed", {
                     required: "OTP is required",
@@ -118,16 +114,14 @@ export default function ResetPass() {
                 }} color="error">{errors.seed.message}</Typography>
               )}
               <Stack>
-                <label htmlFor="password" style={{ fontSize: "1.3rem", fontWeight: 300, opacity: 0.8, marginBottom: 6 }}>
-                  Password
-                </label>
+              <InputLabel htmlFor="password" style={{ color:'rgba(21, 44, 91, 1)',fontSize: "1.1rem", fontWeight: 400, marginBottom: 6}}>Password</InputLabel>
                 <OutlinedInput
                   type={showPassword ? 'text' : 'password'}
                   id="password"
                   placeholder="Please type here ..."
                   sx={{
                     marginBottom: 1,
-                    bgcolor: "#f5f6f88f"
+                    bgcolor: "rgba(245, 246, 248, 1)"
                   }}
                   {...register("password", {
                     required: "Password is required",
@@ -152,10 +146,7 @@ export default function ResetPass() {
                 }} color="error">{errors.password.message}</Typography>
               )}
               <Stack>
-
-                <label htmlFor="confirmPassword" style={{ fontSize: "1.3rem", fontWeight: 300, opacity: 0.8, marginBottom: 6 }}>
-                  Confirm Password
-                </label>
+              <InputLabel htmlFor="confirmPassword" style={{ color:'rgba(21, 44, 91, 1)',fontSize: "1.1rem", fontWeight: 400, marginBottom: 6}}>Confirm Password</InputLabel>
                 <OutlinedInput
 
                   type={showConfPassword ? 'text' : 'password'}
@@ -164,7 +155,7 @@ export default function ResetPass() {
                   sx={{
 
                     marginBottom: 1,
-                    bgcolor: "#f5f6f88f"
+                    bgcolor: "rgba(245, 246, 248, 1)"
                   }}
                   {...register("confirmPassword", {
                     required: "Confirm Password is required",
