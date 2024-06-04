@@ -10,7 +10,7 @@ const MasterLayout = () => {
         <div >
           <SideBar/>
         </div>
-        <div>
+        <div className="w-100">
           <Outlet/>
         </div>
       </div>

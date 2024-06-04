@@ -25,6 +25,10 @@ import AdsList from "./modules/AdsModule/components/AdsList/AdsList";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { ColorModeContext, useMode } from './modules/SharedModule/Mode/Mode'
 import { ToastContainer } from 'react-toastify';
+import AddRoom from "./modules/RoomsModule/components/AddRoom/AddRoom";
+import AddFacility from "./modules/FacilitiesModule/components/FacilitiesList/AddFacility";
+import CreateAds from "./modules/AdsModule/components/AdsList/CreateAds";
+
 function App() {
   const [theme, colorMode] = useMode();
   const routers = createBrowserRouter([
@@ -56,11 +60,14 @@ function App() {
         { path: "explore-rooms", element: <ExploreRooms /> },
         { path: "favorites", element: <Favs /> },
         { path: "ads", element: <AdsList /> },
+        { path: "create-add", element: <CreateAds /> },
         { path: "booking-process", element: <BookingProcess /> },
         { path: "booking-done", element: <BookingDone /> },
         { path: "booking-list", element: <BookingList /> },
         { path: "facilities", element: <FacilitiesList /> },
+        { path: "add-facility", element: <AddFacility /> },
         { path: "rooms", element: <RoomsList /> },
+        { path: "add-room", element: <AddRoom /> },
         { path: "users", element: <UsersList /> }
       ]
     }
