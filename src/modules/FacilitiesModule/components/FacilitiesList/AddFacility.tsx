@@ -39,7 +39,7 @@ export default function AddFacility() {
     const onSubmit = async (data) => {
             try {
       let response = await axios.post(`${baseUrl}/admin/room-facilities` , data , {
-        headers: { Authorization: `${authorization}` },
+        headers: authorization,
       })
        toast.success( response.data.message , {
          autoClose: 3000,

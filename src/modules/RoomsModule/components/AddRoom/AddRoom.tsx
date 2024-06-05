@@ -69,7 +69,7 @@ export default function AddRoom() {
   const getFacilities = async () => {
     try {
       let response = await axios.get(`${baseUrl}/admin/room-facilities`, {
-        headers: { Authorization: `${authorization}` },
+        headers: authorization,
       });
       setFacilities(response.data.data.facilities);
       console.log(response.data.data.facilities);
