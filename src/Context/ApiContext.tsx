@@ -7,7 +7,7 @@
 
      let baseUrl = 'https://upskilling-egypt.com:3000/api/v0'
          
-     let authorization = `${localStorage.getItem('token')}`
+     let authorization = {Authorization: `${localStorage.getItem('token')}`}
 
      return (
      <ApiContext.Provider value = {{ baseUrl , authorization }}>
