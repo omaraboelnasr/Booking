@@ -1,7 +1,19 @@
 import React from 'react'
 import './Sidebar.css'
+import { Button } from '@mui/material'
+// import "../../../../App.css";
+
 export default function Sidebar() {
+
+  const logOut = () => {
+    return localStorage.removeItem('token')
+  }
+
   return (
-    <div>Sidebar</div>
+    <>
+      Sidebar 
+      <Button onClick={logOut}>logOut</Button>
+    </>
+    
   )
 }

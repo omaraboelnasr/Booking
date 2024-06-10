@@ -1,8 +1,26 @@
+@import 'react-toastify/dist/ReactToastify.css';
+
 #root {
   max-width: 100%;
-  
-  margin: 0 auto;
+  box-sizing: border-box;
+  margin: 0 ;
   padding: 0;
-  text-align: center;
 }
 
+
+.login-grid{
+  display: flex;
+  justify-content: space-evenly;
+}
+
+a{
+  text-decoration: none;
+  color:  rgba(21, 44, 91, 1);
+  font-weight: bold;
+}
+
+.forget-link{
+  display: block;
+  text-align: right; 
+  font-weight: lighter;
+}

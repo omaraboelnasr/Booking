@@ -21,49 +21,69 @@ import RoomsList from "./modules/RoomsModule/components/RoomsList/RoomsList";
 import BookingProcess from "./modules/BookingProcessModule/components/BookingProcess/BookingProcess";
 import BookingDone from "./modules/BookingProcessModule/components/BookingDone/BookingDone";
 import AdsList from "./modules/AdsModule/components/AdsList/AdsList";
+// For MUI Dark Mode
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import { ColorModeContext, useMode } from './modules/SharedModule/Mode/Mode'
+import { ToastContainer } from 'react-toastify';
+import AddRoom from "./modules/RoomsModule/components/AddRoom/AddRoom";
+import AddFacility from "./modules/FacilitiesModule/components/FacilitiesList/AddFacility";
+import CreateAds from "./modules/AdsModule/components/AdsList/CreateAds";
 
 function App() {
- 
+  const [theme, colorMode] = useMode();
   const routers = createBrowserRouter([
     {
       path: "/",
       element: <AuthLayout />,
       errorElement: <NotFound />,
       children: [
-        { index: true, element: <HomePage/> },
-        { path: "login", element: <Login/> },
+        { index: true, element: <HomePage /> },
+        { path: "login", element: <Login /> },
         { path: "register", element: <Register /> },
-        { path: "forget-pass", element: <ForgetPass /> },
-        { path: "reset-pass", element: <ResetPass /> },
-        { path: "change-pass", element: <ChangePass /> },
-      ],
+        { path: "forget-password", element: <ForgetPass /> },
+        { path: "reset-password", element: <ResetPass /> },
+        { path: "change-pass", element: <ChangePass /> }
+      ]
     },
     {
       path: "dashboard",
       element: (
-        <ProtectedRoute >
+        <ProtectedRoute>
           <MasterLayout />
         </ProtectedRoute>
       ),
       errorElement: <NotFound />,
       children: [
         { index: true, element: <Dashboard /> },
-        { path: "home", element: <HomePage/> },
-        { path: "page-details", element: <PageDetails/> },
-        { path: "explore-rooms", element: <ExploreRooms/> },
-        { path: "favorites", element: <Favs/> },
-        { path: "ads", element: <AdsList/> },
-        { path: "booking-process", element: <BookingProcess/> },
-        { path: "booking-done", element: <BookingDone/> },
+        { path: "home", element: <HomePage /> },
+        { path: "page-details", element: <PageDetails /> },
+        { path: "explore-rooms", element: <ExploreRooms /> },
+        { path: "favorites", element: <Favs /> },
+        { path: "ads", element: <AdsList /> },
+        { path: "create-add", element: <CreateAds /> },
+        { path: "booking-process", element: <BookingProcess /> },
+        { path: "booking-done", element: <BookingDone /> },
         { path: "booking-list", element: <BookingList /> },
         { path: "facilities", element: <FacilitiesList /> },
+        { path: "add-facility", element: <AddFacility /> },
         { path: "rooms", element: <RoomsList /> },
-        { path: "users", element: <UsersList /> },
-      ],
-    },
+        { path: "add-room", element: <AddRoom /> },
+        { path: "users", element: <UsersList /> }
+      ]
+    }
   ]);
 
-  return <RouterProvider router={routers} />;
+  return (
+    <>
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <RouterProvider router={routers} />
+          <ToastContainer/>
+        </ThemeProvider>
+      </ColorModeContext.Provider>
+    </>
+  );
 }
 
 export default App;
