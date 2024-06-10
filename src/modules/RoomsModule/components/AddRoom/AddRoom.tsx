@@ -19,11 +19,12 @@ import { ApiContext } from "../../../../Context/ApiContext";
 import { FileUploader } from "react-drag-drop-files";
 import { toast } from "react-toastify";
 import { Error } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 export default function AddRoom() {
 
   const fileTypes = ["JPEG", "PNG", "GIF"];
-
+  const navigate = useNavigate()
   const [file, setFile] = useState(null);
   const handleChange = (file) => {
     setFile(file);
@@ -82,23 +83,26 @@ export default function AddRoom() {
     let roomData = appendToFormData(data);
     try {
       let response = await axios.post(`${baseUrl}/admin/rooms` , roomData , {
-        headers: { Authorization: `${authorization}` },
+        headers: authorization,
       })
-      console.log(response);
        toast.success( response.data.message , {
          autoClose: 3000,
          hideProgressBar: true,
          pauseOnHover: false
          });
+         navigate('/dashboard/rooms')
     } catch (error) {
          toast.error( error.response.data.message , {
          autoClose: 3000,
          hideProgressBar: true,
          pauseOnHover: false
        });
-      console.log(error);
     }
   };
+
+  const handleCancle = ()=>{
+    navigate('/dashboard/rooms')
+  }
 
   useEffect(() => {
     getFacilities();
@@ -244,6 +248,7 @@ export default function AddRoom() {
               variant="outlined"
               type="reset"
               sx={{ marginX: 3 , paddingX:4}}
+              onClick={handleCancle}
             >
               Cancel
             </Button>

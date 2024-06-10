@@ -1,13 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Alert, Box, FormControl, IconButton, InputLabel, MenuItem, Select, TextField } from '@mui/material';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import Modal from '@mui/material/Modal';
-import { Close, Error } from '@mui/icons-material';
+import React, { useContext, useEffect, useState } from 'react';
+import { Alert, Box, Button, FormControl, IconButton, InputLabel, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { ApiContext } from '../../../Context/ApiContext';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import { ApiContext } from '../../../../Context/ApiContext';
 import { toast } from 'react-toastify';
+import { Close } from '@mui/icons-material';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -16,64 +14,90 @@ const style = {
     transform: 'translate(-50%, -50%)',
     width: 500,
     bgcolor: 'background.paper',
-    border: '2px solid #000',
+    border: '1px solid #000',
     boxShadow: 24,
     p: 5,
 };
 
-export default function CreateAds() {
-
-    const { register, handleSubmit, formState: { errors } , setValue } = useForm()
-
-    const [openAds, setOpenAds] = React.useState(false);
+const SharedHeader = ({ type, butn }) => {
+    const { baseUrl, authorization } = useContext(ApiContext);
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm()
+    const [rooms, setRooms] = useState([])
+    const [selectedNames, setSelectedNames] = useState([]);
+    const [active, setActive] = useState(false);
+    const [open, setOpen] = useState(false);
+    const [openAds, setOpenAds] = useState(false);
+    const navigate = useNavigate()
+    const handleOpen = () => {
+        setOpen(true);
+        setValue('name', '')
+    }
+    const handleClose = () => setOpen(false);
     const handleOpenAds = () => {
         setOpenAds(true)
-        setValue('discount' , '')
+        setValue('discount', '')
     };
     const handleCloseAds = () => setOpenAds(false);
-
-
-    const { baseUrl, authorization } = useContext(ApiContext);
-
-    const [rooms, setRooms] = useState([])
-
-    const [selectedNames, setSelectedNames] = useState([]);
-
-    const [active, setActive] = useState(false);
 
     const getRooms = async () => {
         try {
             let response = await axios.get(`${baseUrl}/admin/rooms`, {
-                headers: authorization ,
+                headers: authorization,
             })
-            console.log(response.data.data.rooms);
             setRooms(response.data.data.rooms)
         } catch (error) {
             console.log(error);
         }
     }
 
-
     const onSubmit = async (data) => {
-        data.isActive = !!active;
-        try {
-            let response = await axios.post(`${baseUrl}/admin/ads`, data, {
-                headers: { Authorization: `${authorization}` },
-            })
-            console.log(response);
-
-            toast.success(response.data.message, {
-                autoClose: 3000,
-                hideProgressBar: true,
-                pauseOnHover: false
-            });
-            handleCloseAds()
-        } catch (error) {
-            toast.error(error.response.data.message, {
-                autoClose: 3000,
-                hideProgressBar: true,
-                pauseOnHover: false
-            });
+        if (type === 'Facilities') {
+            try {
+                let response = await axios.post(`${baseUrl}/admin/room-facilities`, data, {
+                    headers: authorization,
+                })
+                toast.success(response.data.message, {
+                    autoClose: 3000,
+                    hideProgressBar: true,
+                    pauseOnHover: false
+                });
+                handleClose()
+            } catch (error) {
+                toast.error(error.response.data.message, {
+                    autoClose: 3000,
+                    hideProgressBar: true,
+                    pauseOnHover: false
+                });
+            }
+        } else {
+            data.isActive = !!active;
+            try {
+                let response = await axios.post(`${baseUrl}/admin/ads`, data, {
+                    headers: { Authorization: `${authorization}` },
+                })
+                toast.success(response.data.message, {
+                    autoClose: 3000,
+                    hideProgressBar: true,
+                    pauseOnHover: false
+                });
+                handleCloseAds()
+            } catch (error) {
+                toast.error(error.response.data.message, {
+                    autoClose: 3000,
+                    hideProgressBar: true,
+                    pauseOnHover: false
+                });
+            }
+        }
+    }
+    
+    const handelAdd = () => {
+        if (type === 'Rooms') {
+            navigate('/dashboard/add-room')
+        } else if (type === 'Facilities') {
+            handleOpen()
+        } else {
+            handleOpenAds()
         }
     }
 
@@ -82,8 +106,61 @@ export default function CreateAds() {
     }, [])
 
     return (
-        <>
-            <Button onClick={handleOpenAds}>Open modal</Button>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
+            <Box>
+                <Typography variant='h4'>{type} Table Details</Typography>
+                <Typography variant='h6'>You can check all details</Typography>
+            </Box>
+            <Box>
+                <Button variant="contained" size="large" onClick={handelAdd}>Add New {butn}</Button>
+            </Box>
+
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+
+                    <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                        <Typography id="modal-modal-title" variant="h4" >
+                            Add Facility
+                        </Typography>
+                        <IconButton aria-label="" onClick={handleClose}>
+                            <Close color='error' sx={{ border: '1px solid', borderRadius: '50%' }}></Close>
+                        </IconButton>
+                    </Box>
+
+                    <Box
+                        component="form"
+                        textAlign={'end'}
+                        onSubmit={handleSubmit(onSubmit)}
+                    >
+                        <TextField
+                            type="text"
+                            sx={{
+                                marginY: 5,
+                                width: "100%",
+                                backgroundColor: "whitesmoke",
+                            }}
+                            placeholder="Facility Name"
+                            {...register("name", { required: 'Facility Name Is Required' })}
+                        />
+                        {errors.name && <Alert icon={<Error fontSize="inherit" />} severity="error">
+                            {errors.name.message}
+                        </Alert>}
+                        <Button
+                            variant="contained"
+                            type="submit"
+                            sx={{ marginTop: 4, paddingX: 3 }}
+                        >
+                            Save
+                        </Button>
+                    </Box>
+                </Box>
+            </Modal>
+
             <Modal
                 open={openAds}
                 onClose={handleCloseAds}
@@ -173,6 +250,8 @@ export default function CreateAds() {
                     </Box>
                 </Box>
             </Modal>
-        </>
+        </Box>
     );
 }
+
+export default SharedHeader;
