@@ -1,3 +1,4 @@
+import { aadsList } from './../../../../Interfaces/Interfaces';
 import React, { useContext, useEffect, useState } from 'react'
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -7,7 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box, Button, Container, IconButton, Menu, MenuItem, Modal } from '@mui/material';
+import { Box, Button, Container, IconButton, Menu, MenuItem, Modal, Typography } from '@mui/material';
 import axios from 'axios';
 import { ApiContext } from '../../../../Context/ApiContext';
 import { ToastContext } from '../../../../Context/ToastContext';
@@ -18,6 +19,7 @@ import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { Close } from '@mui/icons-material';
 import DeleteData from '../../../SharedModule/DeleteData/DeleteData';
+import SharedView from '../../../SharedModule/SharedView/SharedView';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -50,20 +52,35 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+const styleView = {
+  position: 'absolute' as 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
+
+
+
 
 export default function AdsList() {
   const {baseUrl , authorization } = useContext(ApiContext)
   const [adsList,setAdsList]=useState([])
+  const [adsListDetails,setAdsListDetails]=useState([])
+
   const { getToastValue } = useContext(ToastContext)
   const [adsId,setAdsId]=useState(null)
   const [openDelete, setOpenDelete] = React.useState(false);
-
-  const getAdsId = (id)=>{
-    setAdsId(id);
-  }
+  const [openView, setOpenView] = React.useState(false);
+  
   const handleOpenDelete = () => {
     setOpenDelete(true)
-    handleClose()
+    handleClose();
+    
   };
   const handleCloseDelete = () => setOpenDelete(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -71,9 +88,18 @@ export default function AdsList() {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const handleOpenView = () => {setOpenView(true);
+    getAdsListDetails();
+    handleClose();
+  }
+    const handleCloseView = () => setOpenView(false);
+    const getAdsId = (id)=>{
+      setAdsId(id);
+     
+    }
+    const handleClose = () => {
+      setAnchorEl(null);
+    };
   const getAdsList = async()=>{
     try{
       const response = await axios.get(`${baseUrl}/admin/ads`,
@@ -85,6 +111,19 @@ export default function AdsList() {
     }catch(error){
       getToastValue('error', error.response.data.message)
     }
+}
+const getAdsListDetails = async()=>{
+  try{
+    const response = await axios.get(`${baseUrl}/admin/ads/${adsId}`,
+    {
+        headers: authorization
+    })
+    
+    setAdsListDetails(response.data.data.ads)
+    
+  }catch(error){
+    getToastValue('error', error.response.data.message)
+  }
 }
 
 const handelDeleteAds = async ()=>{
@@ -108,6 +147,7 @@ useEffect(()=>{
 },[])
   return (
     <Container>
+    
         <SharedHeader type={'Ads'} butn={'Ads'}/>
         <Modal
         open={openDelete}
@@ -134,6 +174,26 @@ useEffect(()=>{
                         </Button>
         </Box>
       </Modal>
+      <div>
+      
+      <Modal
+        open={openView}
+        onClose={handleCloseView}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+         <Box sx={style}>
+          <Box sx={{display:'flex',justifyContent:'end'}}>
+            <IconButton aria-label="" onClick={handleCloseView}>
+              <Close color='error' sx={{ border: '1px solid', borderRadius: '50%' }}></Close>
+            </IconButton>
+          </Box>
+
+          <SharedView  adsListDetails={adsListDetails}/>
+          </Box>
+      </Modal>
+    </div>
+  
     <Box>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -182,7 +242,7 @@ useEffect(()=>{
                         'aria-labelledby': 'basic-button',
                       }}
                     >
-                      <MenuItem onClick={handleClose}><RemoveRedEyeOutlinedIcon sx={{ marginX: 1, color: 'rgba(32, 63, 199, 1)' }} /> View</MenuItem>
+                      <MenuItem onClick={handleOpenView}><RemoveRedEyeOutlinedIcon sx={{ marginX: 1, color: 'rgba(32, 63, 199, 1)' }} /> View</MenuItem>
                       <MenuItem onClick={handleClose}><EditNoteOutlinedIcon sx={{ marginX: 1, color: 'rgba(32, 63, 199, 1)' }} /> Edit</MenuItem>
                       <MenuItem onClick={handleOpenDelete}><DeleteOutlineOutlinedIcon sx={{ marginX: 1, color: 'rgba(32, 63, 199, 1)' }} /> Delete</MenuItem>
                     </Menu>

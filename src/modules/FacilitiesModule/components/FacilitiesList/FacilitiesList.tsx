@@ -18,6 +18,7 @@ import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { Close } from '@mui/icons-material';
 import DeleteData from '../../../SharedModule/DeleteData/DeleteData';
+import SharedView from '../../../SharedModule/SharedView/SharedView';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -58,6 +59,7 @@ export default function FacilitiesList() {
 
   const getfacilId = (id)=>{
     setfacilId(id);
+    
   }
   const handleOpenDelete = () => {
     setOpenDelete(true)

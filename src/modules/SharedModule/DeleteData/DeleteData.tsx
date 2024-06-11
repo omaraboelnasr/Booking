@@ -9,7 +9,7 @@ const DeleteData = ({type}) => {
                 <img src={deleteImg} alt="" />
             </div>
             <div>
-            <h2>Delete This {type} ?</h2>
+            <h2>Delete This {type}?</h2>
             <p>are you sure you want to delete this item ? if you are sure just click on delete it</p>
             </div>
             </Box>
