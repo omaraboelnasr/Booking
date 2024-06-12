@@ -121,7 +121,6 @@ export default function UsersList() {
   }, [page, rowsPerPage, count])
 
   return (
-    <>
       <Container  >
         <Modal
           open={open}
@@ -206,7 +205,6 @@ export default function UsersList() {
           />
         </Box>
       </Container>
-    </>
   )
 }
 

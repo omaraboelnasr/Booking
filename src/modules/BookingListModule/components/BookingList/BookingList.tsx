@@ -90,7 +90,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   }, [page , rowsPerPage , count])
   
   return (
-    <>
       <Container  >
       <TableContainer component={Paper}>
       <Table  aria-label="customized table">
@@ -131,6 +130,5 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     />
         </Box>
         </Container>
-    </>
   )
 }

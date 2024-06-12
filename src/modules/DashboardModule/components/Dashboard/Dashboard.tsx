@@ -51,8 +51,8 @@ const size = {
   }, [])
 
   return (
-    <>
-      <Box component={Container} paddingX={5} >
+    <Container>
+      <Box>
         <Grid container display={'flex'} justifyContent={'space-between'} >
           <Grid sm={3} display={'flex'} justifyContent={'space-between'} alignItems={'center'} paddingX={3} paddingY={5} sx={{ backgroundColor:'#1A1B1E' , borderRadius:'15px'  }}>
             <Box>
@@ -139,6 +139,6 @@ const size = {
 
         </Box>
       </Box>
-    </>
+      </Container>
   )
 }

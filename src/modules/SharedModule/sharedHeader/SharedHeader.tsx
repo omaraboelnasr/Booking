@@ -71,6 +71,7 @@ const SharedHeader = ({ type, butn }) => {
             });
         }
     }
+
     const onSubmit = async (data) => {
 
         if (type === 'Facilities') {
@@ -113,7 +114,7 @@ const SharedHeader = ({ type, butn }) => {
                 });
             }
     }
-    
+}
     const handelAdd = () => {
         if (type === 'Rooms') {
             setMode('create')
@@ -284,5 +285,5 @@ const SharedHeader = ({ type, butn }) => {
         </Box>
     );
 }
-}
+
 export default SharedHeader;
