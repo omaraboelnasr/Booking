@@ -42,7 +42,6 @@ const SideBar: React.FC = () => {
           '& .MuiDrawer-paper': {
             width: collapsed ? 70 : drawerWidth,
             boxSizing: 'border-box',
-           
           },
         }}
       >
@@ -59,7 +58,7 @@ const SideBar: React.FC = () => {
             </ListItemIcon>
             {!collapsed && <ListItemText primary="Home" />}
           </ListItem>
-          {loginData?.userGroup === 'admin' && (
+          {loginData?.role === 'admin' && (
             <ListItem button component={Link} to="/dashboard/users">
               <ListItemIcon>
                 <GroupIcon />
@@ -73,7 +72,7 @@ const SideBar: React.FC = () => {
             </ListItemIcon>
             {!collapsed && <ListItemText primary="Rooms" />}
           </ListItem>
-          {loginData?.userGroup === 'admin' && (
+          {loginData?.role === 'admin' && (
             <ListItem button component={Link} to="/dashboard/ads">
               <ListItemIcon>
                 <BedroomParentIcon />
@@ -81,7 +80,7 @@ const SideBar: React.FC = () => {
               {!collapsed && <ListItemText primary="Ads" />}
             </ListItem>
           )}
-          {loginData?.userGroup === 'admin' && (
+          {loginData?.role === 'admin' && (
             <ListItem button component={Link} to="/dashboard/booking-list">
               <ListItemIcon>
                 <CalendarMonthIcon />
@@ -89,7 +88,7 @@ const SideBar: React.FC = () => {
               {!collapsed && <ListItemText primary="Bookings" />}
             </ListItem>
           )}
-          {loginData?.userGroup === 'admin' && (
+          {loginData?.role === 'admin' && (
             <ListItem button component={Link} to="/dashboard/facilities">
               <ListItemIcon>
                 <WifiIcon />

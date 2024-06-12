@@ -1,20 +1,20 @@
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { AppBar, Avatar, Badge, Box, IconButton, InputBase, Toolbar, Typography } from '@mui/material';
 import { alpha, styled } from '@mui/system';
-import React, { useContext } from 'react';
-import { AuthContext } from '../../../Context/AuthContext';
+import React, { useContext, useEffect, useState } from 'react';
 import ProfileImg from '../../../assets/avatar.png';
+import { UserInfoContext } from '../../../Context/UserInfoContext';
 
 
 
 const Navbar: React.FC = () => {
-  const { loginData } = useContext(AuthContext);
- 
-  
+
+  const { userInfoData} = useContext(UserInfoContext);
+
 
   const Search = styled('div')(({ theme }) => ({
     position: 'relative',
-   
+
     backgroundColor: alpha(theme.palette.common.white, 1), // Set background to white
     '&:hover': {
       backgroundColor: alpha(theme.palette.common.white, 0.95),
@@ -28,16 +28,16 @@ const Navbar: React.FC = () => {
     boxShadow: '0 2px 6px rgba(0, 0, 0, 0.1)', // Optional: add some shadow for better visibility
     height: '40px', // Increase the height of the search input
   }));
- 
-  
+
+
   const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit',
     '& .MuiInputBase-input': {
       padding: theme.spacing(1, 1, 1, 0),
-      paddingLeft:theme.spacing(2),
+      paddingLeft: theme.spacing(2),
       width: '100%',
       backgroundColor: '#fff', // Ensure the input field has a white background
-  
+
       '&::placeholder': {
         color: theme.palette.text.secondary, // Set placeholder color to muted (text secondary)
       },
@@ -46,32 +46,35 @@ const Navbar: React.FC = () => {
     },
   }));
 
+  // useEffect(()=>{
+    
+  // },[userInfoData])
   return (
-    <AppBar  position="fixed" sx={{ backgroundColor: '#F8F9FB', borderBottom: '1px solid #ccc' }}>
+    <AppBar position="fixed" sx={{ backgroundColor: '#F8F9FB', borderBottom: '1px solid #ccc' }}>
       <Toolbar sx={{ minHeight: '60px' }}>
-      <Search>
-       
+        <Search>
+
           <StyledInputBase
             placeholder="Search Here…"
             inputProps={{ 'aria-label': 'search' }}
           />
         </Search>
         <Box sx={{ flexGrow: 1 }} /> {/* This will push the items to the right */}
-        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-          <Avatar alt="Profile Picture" src={loginData?.profileImage || ProfileImg} />
+        {userInfoData&&<Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <Avatar alt="Profile Picture" src={userInfoData?.profileImage || ProfileImg} />
           <Typography variant="body1" sx={{ marginLeft: 2, color: '#000000' }}>
-            Hello {loginData?.userName}
+            Hello {userInfoData?.userName}
           </Typography>
-        </Box>
+        </Box>}
+        
         <IconButton sx={{ color: '#000000', marginLeft: 1 }}> {/* Set color to black */}
-            <Badge badgeContent={2} color="error">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
+          <Badge badgeContent={2} color="error">
+            <NotificationsIcon />
+          </Badge>
+        </IconButton>
       </Toolbar>
     </AppBar>
   );
 };
 
 export default Navbar;
-``

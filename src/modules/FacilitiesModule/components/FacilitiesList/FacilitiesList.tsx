@@ -104,7 +104,7 @@ const handelDeleteFacility = async ()=>{
 
 useEffect(()=>{
   getAdsList()
-},[])
+},[facilitiesList])
 
   return (
     <Container>
