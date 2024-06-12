@@ -1,20 +1,23 @@
-import { Outlet } from "react-router-dom";
-import NavBar from "../Navbar/Navbar";
-import SideBar from "../Sidebar/Sidebar";
+import React from 'react';
+import { Box, CssBaseline } from '@mui/material';
+import { Outlet } from 'react-router-dom';
+import NavBar from '../Navbar/Navbar';
+import SideBar from '../Sidebar/Sidebar';
 
-const MasterLayout = () => {
+const MasterLayout: React.FC = () => {
   return (
-    <>
-      <NavBar/>
-      <div className="d-flex">
-        <div >
-          <SideBar/>
+    <Box sx={{ display: 'flex' }}>
+      <CssBaseline />
+
+      <NavBar />
+
+      <SideBar />
+      <Box component="main" >
+        <div style={{ marginTop: '100px' }}> 
+          <Outlet />
         </div>
-        <div className="w-100">
-          <Outlet/>
-        </div>
-      </div>
-    </>
+      </Box>
+    </Box>
   );
 };
 
