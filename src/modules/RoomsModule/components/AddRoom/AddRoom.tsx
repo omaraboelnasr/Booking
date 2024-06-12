@@ -19,28 +19,36 @@ import { ApiContext } from "../../../../Context/ApiContext";
 import { FileUploader } from "react-drag-drop-files";
 import { toast } from "react-toastify";
 import { Error } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { ModeContext } from "../../../../Context/ModeContext";
 
 export default function AddRoom() {
 
   const fileTypes = ["JPEG", "PNG", "GIF"];
   const navigate = useNavigate()
   const [file, setFile] = useState(null);
-  const handleChange = (file) => {
-    setFile(file);
+  const handleChange = (files) => {
+    setFile(files);
   };
 
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty, isValid },
+    formState: { errors },
+    setValue,
   } = useForm();
 
   const { baseUrl, authorization } = useContext(ApiContext);
 
+  const { mode  } = useContext(ModeContext);
+
   const [facilities, setFacilities] = useState([]);
 
+  const [roomDetails, setRoomDetails] = useState([]);
+
   const [selectedNames, setSelectedNames] = useState([]);
+
+  const { id } = useParams() 
 
   const appendToFormData = (data) => {
       
@@ -57,15 +65,44 @@ export default function AddRoom() {
     facilitiesArray.forEach((facility) => {
     roomFormData.append("facilities[]", facility);
     });
-      
-    if (data.imgs && data.imgs.length > 0) {
-    for (let i = 0; i < data.imgs.length; i++) {
-    roomFormData.append("imgs", data.imgs[i]);
-    }
+    
+
+  if (file) {
+  for (let i = 0; i < file.length; i++) {
+  roomFormData.append("imgs", file[i]);
   }
+}
 
     return roomFormData ;
   };
+
+
+  const appendToFormDataToUpdate = (data) => {
+      
+    const roomFormData = new FormData();
+    
+    roomFormData.append("roomNumber", roomDetails.roomNumber)
+    roomFormData.append("price", data.price)
+    roomFormData.append("capacity", data.capacity)
+    roomFormData.append("discount", data.discount)
+      
+    const facilitiesArray = Array.isArray(data.facilities)
+    ? data.facilities
+    : [data.facilities];
+    facilitiesArray.forEach((facility) => {
+    roomFormData.append("facilities[]", facility);
+    });
+      
+
+        if (file) {
+  for (let i = 0; i < file.length; i++) {
+    roomFormData.append("imgs", file[i]);
+  }
+}
+    
+    return roomFormData ;
+  };
+
 
   const getFacilities = async () => {
     try {
@@ -78,6 +115,20 @@ export default function AddRoom() {
       console.log(error);
     }
   };
+
+  
+  const getRoomDetails = async () => {
+    try {
+       let response = await axios.get(`${baseUrl}/admin/rooms/${id}`, {
+        headers: authorization,
+       })
+      setRoomDetails(response.data.data.room)
+      console.log(roomDetails);
+    } catch (error) {
+     console.log(error);
+    }
+  }
+
 
   const onSubmit = async (data) => {
     let roomData = appendToFormData(data);
@@ -100,12 +151,57 @@ export default function AddRoom() {
     }
   };
 
+
+    const updateRoom = async (data) => {
+    let updateRoomData = appendToFormDataToUpdate(data);
+    try {
+      let response = await axios.put(`${baseUrl}/admin/rooms/${id}` , updateRoomData , {
+        headers: authorization,
+      })
+       toast.success( response.data.message , {
+         autoClose: 3000,
+         hideProgressBar: true,
+         pauseOnHover: false
+         });
+      navigate('/dashboard/rooms')
+    } catch (error) {
+         toast.error( error.response.data.message , {
+         autoClose: 3000,
+         hideProgressBar: true,
+         pauseOnHover: false
+       });
+    }
+  };
+
+  console.log(roomDetails)
+
   const handleCancle = ()=>{
     navigate('/dashboard/rooms')
   }
 
+    const setValues = () => {
+    if (mode==='update' && roomDetails) {
+      setValue('price', roomDetails?.price);
+      setValue('capacity', roomDetails?.capacity);
+      setValue('discount', roomDetails?.discount);
+      setValue('roomNumber', roomDetails?.roomNumber);
+    }
+  }
+
+
+//   useEffect(() => {
+//   const fetchData = async () => {
+//     await getRoomDetails();
+//     setValues();
+//   };
+//   getFacilities()
+//   fetchData();
+// }, [roomDetails]);
+
+
   useEffect(() => {
-    getFacilities();
+    getFacilities();    
+    getRoomDetails()
   }, []);
 
   return (
@@ -114,11 +210,14 @@ export default function AddRoom() {
         <Container>
           <Box
             component="form"
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={ mode==='create' ? handleSubmit(onSubmit) : handleSubmit(updateRoom)}
             sx={{ width: "75%", marginX: "auto" }}
           >
+                  {setValue('roomNumber', roomDetails?.roomNumber)}
+
+            {mode === 'create' ? <>
             <TextField
-              type="number"
+              type="text"
               sx={{
                 marginY: 2,
                 width: "100%",
@@ -130,8 +229,11 @@ export default function AddRoom() {
             {errors.roomNumber && <Alert icon={<Error fontSize="inherit" />} severity="error">
                  {errors.roomNumber.message}
                  </Alert>}
+            </>  : '' }
+           {console.log(roomDetails)}
             <Box display={"flex"} justifyContent={"space-between"} >
-              <Box sx={{width:'48%'}}>
+              <Box sx={{ width: '48%' }}>
+                {setValue('price', roomDetails?.price)}
                <TextField
                 type="number"
                 sx={{
@@ -139,14 +241,16 @@ export default function AddRoom() {
                   width: "100%",
                   backgroundColor: "whitesmoke",
                 }}
-                placeholder="Price"
+                  placeholder="Price"
+                  // defaultValue={55}
                 {...register("price" , {required:'Price Is Required' , maxLength:{value:5 , message:'Price must not be more than 5 numbers'} , minLength:{value:2 , message:'Price must not be less than 2 numbers'} })}
               />
                {errors.price && <Alert icon={<Error fontSize="inherit" />} severity="error">
                  {errors.price.message}
                  </Alert>}
               </Box>
-              <Box sx={{width:'48%'}}>
+              <Box sx={{ width: '48%' }}>
+             {setValue('capacity', roomDetails?.capacity)}
                      <TextField
                 type="number"
                 sx={{
@@ -169,7 +273,8 @@ export default function AddRoom() {
               justifyContent={"space-between"}
               alignItems={"center"}
             >
-              <Box sx={{width:'48%'}}>
+              <Box sx={{ width: '48%' }}>
+                {setValue('discount', roomDetails?.discount)}
                <TextField
                 type="number"
                 sx={{
@@ -185,7 +290,7 @@ export default function AddRoom() {
                  </Alert>}
               </Box>
          
-              <Box sx={{width:'48%'}}>
+              <Box sx={{ width: '48%' }}>
             <FormControl
                 sx={{
                   marginY: 2,
@@ -235,7 +340,7 @@ export default function AddRoom() {
               
               <FileUploader
                  multiple={true}
-                 handleChange={handleChange}
+                 handleChange={(files) => handleChange(files)}
                 types={fileTypes}
                 {...register('imgs')}
               />

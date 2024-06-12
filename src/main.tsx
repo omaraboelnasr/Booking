@@ -5,6 +5,8 @@ import './index.css'
 import AuthContextProvider from './Context/AuthContext.tsx'
 import ApiContextProvider from './Context/ApiContext.tsx'
 import { ToastContextProvider } from './Context/ToastContext.tsx'
+
+import ModeContextProvider from './Context/ModeContext.tsx'
 import UserInfoContextProvider from './Context/UserInfoContext.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -13,7 +15,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <AuthContextProvider>
         <UserInfoContextProvider>
         <ToastContextProvider>
-          <App />
+          <ModeContextProvider>
+            <App />
+            </ModeContextProvider>
         </ToastContextProvider>
         </UserInfoContextProvider>
       </AuthContextProvider>

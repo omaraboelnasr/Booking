@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box, Button, Container, IconButton, Menu, MenuItem, Modal } from '@mui/material';
+import { Box, Button, Container, IconButton, Menu, MenuItem, Modal, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import { ApiContext } from '../../../../Context/ApiContext';
 import { ToastContext } from '../../../../Context/ToastContext';
@@ -18,6 +18,7 @@ import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
 import { Close } from '@mui/icons-material';
 import DeleteData from '../../../SharedModule/DeleteData/DeleteData';
+import { useForm } from 'react-hook-form';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -53,16 +54,22 @@ export default function FacilitiesList() {
   const {baseUrl , authorization } = useContext(ApiContext)
   const [facilitiesList,setFacilitiesList]=useState([])
   const { getToastValue } = useContext(ToastContext)
-  const [facilId,setfacilId]=useState(null)
+
+  const [facilId, setfacilId] = useState(null)
+  
+  const [name,setName]=useState(null)
+  
   const [openDelete, setOpenDelete] = React.useState(false);
 
-  const getfacilId = (id)=>{
+  const getfacilId = (id , name) => {
+    setName(name)
     setfacilId(id);
   }
   const handleOpenDelete = () => {
     setOpenDelete(true)
     handleClose()
   };
+
   const handleCloseDelete = () => setOpenDelete(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -72,6 +79,19 @@ export default function FacilitiesList() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm()
+  const [openUpdate, setOpenUpdate] = useState(false);
+
+  const handleOpenUpdate = () => {
+    setOpenUpdate(true);
+    handleClose()
+    setValue('name', name)
+  }
+
+  const handleCloseUpdate = () => setOpenUpdate(false);
+
 
   const getAdsList = async()=>{
     try{
@@ -101,6 +121,18 @@ const handelDeleteFacility = async ()=>{
   }
 }
 
+const onSubmit = async (data) => {
+    try {
+      let response = await axios.put(`${baseUrl}/admin/room-facilities/${facilId}`, data, {
+        headers: authorization,
+      })
+      getToastValue('success', response.data.message)
+      handleCloseUpdate()
+      getAdsList()
+    } catch (error) {
+      getToastValue('error', error.response.data.message)
+    }
+  }
 
 useEffect(()=>{
   getAdsList()
@@ -108,7 +140,56 @@ useEffect(()=>{
 
   return (
     <Container>
-      <SharedHeader type={'Facilities'} butn={'Facility'}/>
+      <SharedHeader type={'Facilities'} butn={'Facility'} />
+      
+
+      <Modal
+        open={openUpdate}
+        onClose={handleCloseUpdate}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+
+          <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+            <Typography id="modal-modal-title" variant="h4" >
+              Update Facility
+            </Typography>
+            <IconButton aria-label="" onClick={handleCloseUpdate}>
+              <Close color='error' sx={{ border: '1px solid', borderRadius: '50%' }}></Close>
+            </IconButton>
+          </Box>
+
+          <Box
+            component="form"
+            textAlign={'end'}
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <TextField
+              type="text"
+              sx={{
+                marginY: 5,
+                width: "100%",
+                backgroundColor: "whitesmoke",
+              }}
+              placeholder="Facility Name"
+              
+              {...register("name", { required: 'Facility Name Is Required' })}
+            />
+            {errors.name && <Alert icon={<Error fontSize="inherit" />} severity="error">
+              {errors.name.message}
+            </Alert>}
+            <Button
+              variant="contained"
+              type="submit"
+              sx={{ marginTop: 4, paddingX: 3 }}
+            >
+              Save
+            </Button>
+          </Box>
+        </Box>
+      </Modal>
+
 
       <Modal
         open={openDelete}
@@ -159,7 +240,7 @@ useEffect(()=>{
                       aria-expanded={open ? 'true' : undefined}
                       onClick={(event)=>{
                         handleClick(event);
-                        getfacilId(fac._id);
+                        getfacilId(fac._id , fac.name);
                       }}
                       sx={{ fontSize: 25 }}
                     >
@@ -175,7 +256,7 @@ useEffect(()=>{
                       }}
                     >
                       <MenuItem onClick={handleClose}><RemoveRedEyeOutlinedIcon sx={{ marginX: 1, color: 'rgba(32, 63, 199, 1)' }} /> View</MenuItem>
-                      <MenuItem onClick={handleClose}><EditNoteOutlinedIcon sx={{ marginX: 1, color: 'rgba(32, 63, 199, 1)' }} /> Edit</MenuItem>
+                      <MenuItem onClick={handleOpenUpdate}><EditNoteOutlinedIcon sx={{ marginX: 1, color: 'rgba(32, 63, 199, 1)' }} /> Edit</MenuItem>
                       <MenuItem onClick={handleOpenDelete}><DeleteOutlineOutlinedIcon sx={{ marginX: 1, color: 'rgba(32, 63, 199, 1)' }} /> Delete</MenuItem>
                     </Menu>
               </StyledTableCell>
