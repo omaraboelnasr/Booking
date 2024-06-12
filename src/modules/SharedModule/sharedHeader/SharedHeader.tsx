@@ -284,5 +284,5 @@ const SharedHeader = ({ type, butn }) => {
         </Box>
     );
 }
-
+}
 export default SharedHeader;
