@@ -68,6 +68,7 @@ function App() {
         { path: "add-facility", element: <AddFacility /> },
         { path: "rooms", element: <RoomsList /> },
         { path: "add-room", element: <AddRoom /> },
+        { path: "add-room/:id", element: <AddRoom /> },
         { path: "users", element: <UsersList /> }
       ]
     }

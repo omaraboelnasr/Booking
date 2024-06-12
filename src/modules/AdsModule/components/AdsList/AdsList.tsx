@@ -7,7 +7,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box, Button, Container, IconButton, Menu, MenuItem, Modal } from '@mui/material';
+import { Alert, Box, Button, Container, FormControl, IconButton, InputLabel, Menu, MenuItem, Modal, Select, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 import { ApiContext } from '../../../../Context/ApiContext';
 import { ToastContext } from '../../../../Context/ToastContext';
@@ -16,8 +16,9 @@ import SharedHeader from '../../../SharedModule/sharedHeader/SharedHeader';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import EditNoteOutlinedIcon from '@mui/icons-material/EditNoteOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-import { Close } from '@mui/icons-material';
+import { Close, Error } from '@mui/icons-material';
 import DeleteData from '../../../SharedModule/DeleteData/DeleteData';
+import { useForm } from 'react-hook-form';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -52,28 +53,49 @@ const style = {
 };
 
 export default function AdsList() {
+
   const {baseUrl , authorization } = useContext(ApiContext)
   const [adsList,setAdsList]=useState([])
-  const { getToastValue } = useContext(ToastContext)
+  const {getToastValue} = useContext(ToastContext)
   const [adsId,setAdsId]=useState(null)
-  const [openDelete, setOpenDelete] = React.useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [discount, setDiscount] = useState(null);
+  const [active, setActive] = useState(false);
 
-  const getAdsId = (id)=>{
+
+  const getAdsId = (id , dis)=>{
     setAdsId(id);
+    setDiscount(dis)
   }
+
   const handleOpenDelete = () => {
     setOpenDelete(true)
     handleClose()
   };
+
   const handleCloseDelete = () => setOpenDelete(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const { register, handleSubmit, formState: { errors }, setValue } = useForm()
+  const [openUpdate, setOpenUpdate] = useState(false);
+
+    const handleOpenUpdate = () => {
+      setOpenUpdate(true);
+      handleClose()
+      setValue('discount', discount)
+  }
+
+  const handleCloseUpdate = () => setOpenUpdate(false);
+
+
   const getAdsList = async()=>{
     try{
       const response = await axios.get(`${baseUrl}/admin/ads`,
@@ -81,7 +103,6 @@ export default function AdsList() {
           headers: authorization
       })
       setAdsList(response.data.data.ads)
-      console.log(response);
     }catch(error){
       getToastValue('error', error.response.data.message)
     }
@@ -100,15 +121,31 @@ const handelDeleteAds = async ()=>{
   } catch (error) {
     getToastValue('error', error.response.data.message)
   }
-}
+  }
+  
+
+  const onSubmit = async (data) => {
+    try {
+      let response = await axios.put(`${baseUrl}/admin/ads/${adsId}`, data , {
+        headers: authorization,
+      })
+      getToastValue('success', response.data.message)
+      handleCloseUpdate()
+      getAdsList()
+    } catch (error) {
+      getToastValue('error', error.response.data.message)
+    }
+  }
 
 
 useEffect(()=>{
   getAdsList()
-},[])
+}, [adsList])
+  
   return (
     <Container>
-        <SharedHeader type={'Ads'} butn={'Ads'}/>
+      <SharedHeader type={'Ads'} butn={'Ads'} />
+      
         <Modal
         open={openDelete}
         onClose={handleCloseDelete}
@@ -134,6 +171,75 @@ useEffect(()=>{
                         </Button>
         </Box>
       </Modal>
+
+      <Modal
+                open={openUpdate}
+                onClose={handleCloseUpdate}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+
+                    <Box display={'flex'} justifyContent={'space-between'} alignItems={'center'}>
+                        <Typography id="modal-modal-title" variant="h3"  >
+                           Update Ads
+                        </Typography>
+                        <IconButton aria-label="" onClick={handleCloseUpdate}>
+                            <Close color='error' sx={{ border: '1px solid', borderRadius: '50%' }}></Close>
+                        </IconButton>
+                    </Box>
+
+                    <Box
+                        component="form"
+                        textAlign={'end'}
+                        onSubmit={handleSubmit(onSubmit)}
+                    >
+
+                        <TextField
+
+                            type="number"
+                            sx={{
+                                width: "100%",
+                                backgroundColor: "whitesmoke",
+                                marginY: 1
+                            }}
+                            placeholder='Discount'
+                            {...register("discount", { required: 'Discount Is Required' })}
+                        />
+                        {errors.discount && <Alert icon={<Error fontSize="inherit" />} severity="error">
+                            {errors.discount.message}
+                        </Alert>}
+                        <FormControl sx={{
+                            marginY: 2,
+                            width: "100%",
+                            backgroundColor: "whitesmoke",
+                        }}>
+                            <InputLabel id="demo-simple-select-label">Active</InputLabel>
+                            <Select
+                                {...register("isActive", { required: 'Active Status Is Required' })}
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                label="Active"
+                                value={active ? 'true' : 'false'}
+                                onChange={(e) => setActive(e.target.value === 'true')}
+                            >
+                                <MenuItem value={'true'}>True</MenuItem>
+                                <MenuItem value={'false'}>False</MenuItem>
+                            </Select>
+                        </FormControl>
+
+                        <Button
+                            variant="contained"
+                            type="submit"
+                            sx={{ marginTop: 4, paddingX: 3 }}
+                        >
+                            Save
+                        </Button>
+                    </Box>
+                </Box>
+            </Modal>
+
+
     <Box>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -167,7 +273,7 @@ useEffect(()=>{
                       aria-expanded={open ? 'true' : undefined}
                       onClick={(event)=>{
                         handleClick(event);
-                        getAdsId(ads._id);
+                        getAdsId(ads._id , ads.room.discount );
                       }}
                       sx={{ fontSize: 25 }}
                     >
@@ -183,7 +289,7 @@ useEffect(()=>{
                       }}
                     >
                       <MenuItem onClick={handleClose}><RemoveRedEyeOutlinedIcon sx={{ marginX: 1, color: 'rgba(32, 63, 199, 1)' }} /> View</MenuItem>
-                      <MenuItem onClick={handleClose}><EditNoteOutlinedIcon sx={{ marginX: 1, color: 'rgba(32, 63, 199, 1)' }} /> Edit</MenuItem>
+                      <MenuItem onClick={handleOpenUpdate}><EditNoteOutlinedIcon sx={{ marginX: 1, color: 'rgba(32, 63, 199, 1)' }} /> Edit</MenuItem>
                       <MenuItem onClick={handleOpenDelete}><DeleteOutlineOutlinedIcon sx={{ marginX: 1, color: 'rgba(32, 63, 199, 1)' }} /> Delete</MenuItem>
                     </Menu>
               </StyledTableCell>

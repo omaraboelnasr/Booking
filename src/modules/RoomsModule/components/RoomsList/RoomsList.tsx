@@ -19,6 +19,8 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 import { Close } from '@mui/icons-material';
 import DeleteData from '../../../SharedModule/DeleteData/DeleteData';
 import { ToastContainer } from 'react-toastify';
+import { ModeContext } from '../../../../Context/ModeContext';
+import { useNavigate } from 'react-router-dom';
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: 'rgba(226, 229, 235, 1)',
@@ -62,13 +64,19 @@ export default function RoomsList() {
   const [roomId,setRoomId]=useState(null)
   const [openDelete, setOpenDelete] = React.useState(false);
 
-  const getRoomId = (id)=>{
+  const { setMode } = useContext(ModeContext);
+
+  let navigate = useNavigate()
+
+  const getRoomId = (id )=>{
     setRoomId(id);
   }
+
   const handleOpenDelete = () => {
     setOpenDelete(true)
     handleClose()
   };
+
   const handleCloseDelete = () => setOpenDelete(false);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -92,6 +100,7 @@ export default function RoomsList() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
   const getRoomsList = async () => {
     try {
       const response = await axios.get(`${baseUrl}/admin/rooms?page=${page + 1}&size=${rowsPerPage}`,
@@ -120,8 +129,15 @@ export default function RoomsList() {
       getToastValue('error', error.response.data.message)
     }
   }
+
+  const handleUpdate = () => {
+    handleClose()
+    setMode('update')
+    navigate(`/dashboard/add-room/${roomId}`)
+  }
+
   useEffect(() => {
-    getRoomsList()
+    getRoomsList() 
   }, [page, rowsPerPage, count])
 
   return (
@@ -201,7 +217,7 @@ export default function RoomsList() {
                       }}
                     >
                       <MenuItem onClick={handleClose}><RemoveRedEyeOutlinedIcon sx={{ marginX: 1, color: 'rgba(32, 63, 199, 1)' }} /> View</MenuItem>
-                      <MenuItem onClick={handleClose}><EditNoteOutlinedIcon sx={{ marginX: 1, color: 'rgba(32, 63, 199, 1)' }} /> Edit</MenuItem>
+                      <MenuItem onClick={handleUpdate}><EditNoteOutlinedIcon sx={{ marginX: 1, color: 'rgba(32, 63, 199, 1)' }} /> Edit</MenuItem>
                       <MenuItem onClick={handleOpenDelete}><DeleteOutlineOutlinedIcon sx={{ marginX: 1, color: 'rgba(32, 63, 199, 1)' }} /> Delete</MenuItem>
                     </Menu>
                   </StyledTableCell>

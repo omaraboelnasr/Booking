@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { Close } from '@mui/icons-material';
+import { ModeContext } from '../../../Context/ModeContext';
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -21,6 +22,7 @@ const style = {
 
 const SharedHeader = ({ type, butn }) => {
     const { baseUrl, authorization } = useContext(ApiContext);
+    const { setMode } = useContext(ModeContext);
     const { register, handleSubmit, formState: { errors }, setValue } = useForm()
     const [rooms, setRooms] = useState([])
     const [selectedNames, setSelectedNames] = useState([]);
@@ -41,7 +43,7 @@ const SharedHeader = ({ type, butn }) => {
 
     const getRooms = async () => {
         try {
-            let response = await axios.get(`${baseUrl}/admin/rooms`, {
+            let response = await axios.get(`${baseUrl}/admin/rooms?page=1&size=100`, {
                 headers: authorization,
             })
             setRooms(response.data.data.rooms)
@@ -62,6 +64,7 @@ const SharedHeader = ({ type, butn }) => {
                     pauseOnHover: false
                 });
                 handleClose()
+
             } catch (error) {
                 toast.error(error.response.data.message, {
                     autoClose: 3000,
@@ -73,7 +76,7 @@ const SharedHeader = ({ type, butn }) => {
             data.isActive = !!active;
             try {
                 let response = await axios.post(`${baseUrl}/admin/ads`, data, {
-                    headers: { Authorization: `${authorization}` },
+                    headers: authorization,
                 })
                 toast.success(response.data.message, {
                     autoClose: 3000,
@@ -93,6 +96,7 @@ const SharedHeader = ({ type, butn }) => {
     
     const handelAdd = () => {
         if (type === 'Rooms') {
+            setMode('create')
             navigate('/dashboard/add-room')
         } else if (type === 'Facilities') {
             handleOpen()
@@ -115,7 +119,7 @@ const SharedHeader = ({ type, butn }) => {
                 <Button variant="contained" size="large" onClick={handelAdd}>Add New {butn}</Button>
             </Box>
 
-            <Modal
+            {type==='Facilities'&&<Modal
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
@@ -159,9 +163,9 @@ const SharedHeader = ({ type, butn }) => {
                         </Button>
                     </Box>
                 </Box>
-            </Modal>
+            </Modal>}
 
-            <Modal
+            {type==='Ads'&&  <Modal
                 open={openAds}
                 onClose={handleCloseAds}
                 aria-labelledby="modal-modal-title"
@@ -249,7 +253,9 @@ const SharedHeader = ({ type, butn }) => {
                         </Button>
                     </Box>
                 </Box>
-            </Modal>
+            </Modal>}
+
+          
         </Box>
     );
 }

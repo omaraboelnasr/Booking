@@ -5,13 +5,16 @@ import './index.css'
 import AuthContextProvider from './Context/AuthContext.tsx'
 import ApiContextProvider from './Context/ApiContext.tsx'
 import { ToastContextProvider } from './Context/ToastContext.tsx'
+import ModeContextProvider from './Context/ModeContext.tsx'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <AuthContextProvider>
       <ApiContextProvider>
         <ToastContextProvider>
-          <App />
+          <ModeContextProvider>
+            <App />
+            </ModeContextProvider>
         </ToastContextProvider>
       </ApiContextProvider>
     </AuthContextProvider>
