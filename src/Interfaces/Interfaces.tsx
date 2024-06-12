@@ -12,7 +12,43 @@ export interface AuthForContext {
 
 }
 export interface DecodedToken {
+  id: string;
+  role: string;
   userName: string;
-  userEmail: string;
+  profileImage?: string;
+  userGroup?: string; 
+
+}
+
+export interface RoomDetailsResponse {
+
+  data: {
+    room: Room,
+    data: {
+      token: string;
+    };
+  };
+}
+
+export interface Room {
+  name: string;
+  location: string;
+  description: string;
+  images: string[];
+  bedrooms: number;
+  livingRooms: number;
+  otherRooms: number;
+  bathrooms: number;
+  diningRooms: number;
+  televisions: number;
+  price: number;
+  discount: number;
+  error: any
  
+
+}
+export interface RoomsListResponse {
+  data: {
+    rooms: Room[];
+  };
 }
