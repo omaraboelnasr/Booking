@@ -52,7 +52,27 @@ const SharedHeader = ({ type, butn }) => {
         }
     }
 
+    const handelAddFacility = async(data)=>{
+        try {
+            let response = await axios.post(`${baseUrl}/admin/room-facilities`, data, {
+                headers: authorization,
+            })
+            toast.success(response.data.message, {
+                autoClose: 3000,
+                hideProgressBar: true,
+                pauseOnHover: false
+            });
+            handleClose()
+        } catch (error) {
+            toast.error(error.response.data.message, {
+                autoClose: 3000,
+                hideProgressBar: true,
+                pauseOnHover: false
+            });
+        }
+    }
     const onSubmit = async (data) => {
+
         if (type === 'Facilities') {
             try {
                 let response = await axios.post(`${baseUrl}/admin/room-facilities`, data, {
@@ -77,6 +97,7 @@ const SharedHeader = ({ type, butn }) => {
             try {
                 let response = await axios.post(`${baseUrl}/admin/ads`, data, {
                     headers: authorization,
+
                 })
                 toast.success(response.data.message, {
                     autoClose: 3000,
@@ -91,7 +112,6 @@ const SharedHeader = ({ type, butn }) => {
                     pauseOnHover: false
                 });
             }
-        }
     }
     
     const handelAdd = () => {
@@ -119,7 +139,9 @@ const SharedHeader = ({ type, butn }) => {
                 <Button variant="contained" size="large" onClick={handelAdd}>Add New {butn}</Button>
             </Box>
 
+
             {type==='Facilities'&&<Modal
+
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="modal-modal-title"
@@ -139,7 +161,7 @@ const SharedHeader = ({ type, butn }) => {
                     <Box
                         component="form"
                         textAlign={'end'}
-                        onSubmit={handleSubmit(onSubmit)}
+                        onSubmit={handleSubmit(handelAddFacility)}
                     >
                         <TextField
                             type="text"
@@ -165,7 +187,11 @@ const SharedHeader = ({ type, butn }) => {
                 </Box>
             </Modal>}
 
-            {type==='Ads'&&  <Modal
+
+         
+
+            
+            {type==="Ads"&&<Modal
                 open={openAds}
                 onClose={handleCloseAds}
                 aria-labelledby="modal-modal-title"
@@ -255,7 +281,6 @@ const SharedHeader = ({ type, butn }) => {
                 </Box>
             </Modal>}
 
-          
         </Box>
     );
 }

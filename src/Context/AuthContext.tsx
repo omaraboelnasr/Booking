@@ -1,23 +1,12 @@
-import { createContext, PropsWithChildren, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import {jwtDecode} from "jwt-decode";
-import { AuthForContext , DecodedToken} from "../Interfaces/Interfaces"; 
+import { DecodedToken} from "../Interfaces/Interfaces"; 
 
 
+export const AuthContext = createContext(null);
 
-// Initial value for the AuthContext
-export const AuthContext = createContext<AuthForContext>({
-  loginData: null,
-  saveLoginData: () => {},
-  baseUrl: "",
-  requestHeaders: {},
-});
-
-export default function AuthContextProvider(props: PropsWithChildren) {
-  const [loginData, setLoginData] = useState<DecodedToken | null>(null);
-  const baseUrl = "https://upskilling-egypt.com:3000";
-  const requestHeaders = {
-    Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
-  };
+export default function AuthContextProvider(props) {
+  const [loginData, setLoginData] = useState(null);
 
   const saveLoginData = () => {
     const encodedToken = localStorage.getItem("token");
@@ -29,12 +18,12 @@ export default function AuthContextProvider(props: PropsWithChildren) {
   };
 
   useEffect(() => {
-    if (localStorage.getItem("token")) saveLoginData();
+    saveLoginData();
   }, []);
 
   return (
     <AuthContext.Provider
-      value={{ loginData, saveLoginData, baseUrl, requestHeaders }}
+      value={{ loginData, saveLoginData }}
     >
       {props.children}
     </AuthContext.Provider>
