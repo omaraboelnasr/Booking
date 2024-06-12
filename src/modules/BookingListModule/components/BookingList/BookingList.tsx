@@ -91,7 +91,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   
   return (
     <>
-      <Container sx={{width:"80%"}} >
+      <Container  >
       <TableContainer component={Paper}>
       <Table  aria-label="customized table">
         <TableHead >

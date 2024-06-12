@@ -122,7 +122,7 @@ export default function UsersList() {
 
   return (
     <>
-      <Container sx={{ width: "80%" }} >
+      <Container  >
         <Modal
           open={open}
           onClose={handleClose}
