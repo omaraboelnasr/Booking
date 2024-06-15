@@ -44,7 +44,7 @@ export default function CreateAds() {
     const getRooms = async () => {
         try {
             let response = await axios.get(`${baseUrl}/admin/rooms`, {
-                headers: authorization ,
+                headers: {authorization} ,
             })
             console.log(response.data.data.rooms);
             setRooms(response.data.data.rooms)

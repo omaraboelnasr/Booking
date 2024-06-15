@@ -75,7 +75,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   const getBookingList = async () => {
     try {
        let response = await axios.get(`${baseUrl}/admin/booking?page=${page+1}&size=${rowsPerPage}`, {
-        headers: authorization,
+        headers: {authorization},
        })
       console.log(response);
       setBookingList(response.data.data.booking)

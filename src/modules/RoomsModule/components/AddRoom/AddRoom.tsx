@@ -107,7 +107,7 @@ export default function AddRoom() {
   const getFacilities = async () => {
     try {
       let response = await axios.get(`${baseUrl}/admin/room-facilities`, {
-        headers: authorization,
+        headers: {authorization},
       });
       setFacilities(response.data.data.facilities);
       console.log(response.data.data.facilities);
@@ -120,7 +120,7 @@ export default function AddRoom() {
   const getRoomDetails = async () => {
     try {
        let response = await axios.get(`${baseUrl}/admin/rooms/${id}`, {
-        headers: authorization,
+        headers: {authorization},
        })
       setRoomDetails(response.data.data.room)
       console.log(roomDetails);
@@ -134,7 +134,7 @@ export default function AddRoom() {
     let roomData = appendToFormData(data);
     try {
       let response = await axios.post(`${baseUrl}/admin/rooms` , roomData , {
-        headers: authorization,
+        headers: {authorization},
       })
        toast.success( response.data.message , {
          autoClose: 3000,
@@ -156,7 +156,7 @@ export default function AddRoom() {
     let updateRoomData = appendToFormDataToUpdate(data);
     try {
       let response = await axios.put(`${baseUrl}/admin/rooms/${id}` , updateRoomData , {
-        headers: authorization,
+        headers: {authorization},
       })
        toast.success( response.data.message , {
          autoClose: 3000,
@@ -200,10 +200,15 @@ export default function AddRoom() {
 
 
   useEffect(() => {
-    getFacilities();    
-    getRoomDetails()
+    getFacilities();
+    if(id){
+      getRoomDetails()
+    }
   }, []);
 
+  useEffect(() => {
+    setValues()
+  }, [roomDetails]);
   return (
     <>
       <Box>
@@ -213,7 +218,6 @@ export default function AddRoom() {
             onSubmit={ mode==='create' ? handleSubmit(onSubmit) : handleSubmit(updateRoom)}
             sx={{ width: "75%", marginX: "auto" }}
           >
-                  {setValue('roomNumber', roomDetails?.roomNumber)}
 
             {mode === 'create' ? <>
             <TextField
@@ -230,10 +234,8 @@ export default function AddRoom() {
                  {errors.roomNumber.message}
                  </Alert>}
             </>  : '' }
-           {console.log(roomDetails)}
             <Box display={"flex"} justifyContent={"space-between"} >
               <Box sx={{ width: '48%' }}>
-                {setValue('price', roomDetails?.price)}
                <TextField
                 type="number"
                 sx={{
@@ -250,7 +252,6 @@ export default function AddRoom() {
                  </Alert>}
               </Box>
               <Box sx={{ width: '48%' }}>
-             {setValue('capacity', roomDetails?.capacity)}
                      <TextField
                 type="number"
                 sx={{
@@ -274,7 +275,6 @@ export default function AddRoom() {
               alignItems={"center"}
             >
               <Box sx={{ width: '48%' }}>
-                {setValue('discount', roomDetails?.discount)}
                <TextField
                 type="number"
                 sx={{

@@ -20,7 +20,7 @@ export default function Dashboard() {
   const getCharts = async () => {
     try {
        let response = await axios.get(`${baseUrl}/admin/dashboard`, {
-        headers: authorization,
+        headers: {authorization},
        })
       setCharts(response.data.data);
       console.log(response.data.data);

@@ -100,7 +100,7 @@ export default function AdsList() {
     try{
       const response = await axios.get(`${baseUrl}/admin/ads`,
       {
-          headers: authorization
+          headers: {authorization}
       })
       setAdsList(response.data.data.ads)
     }catch(error){
@@ -112,7 +112,7 @@ const handelDeleteAds = async ()=>{
   try {
     const response = await axios.delete(`${baseUrl}/admin/ads/${adsId}`,
       {
-        headers: authorization
+        headers: {authorization}
       })
       getToastValue('success', response.data.message)
       handleCloseDelete()
@@ -127,7 +127,7 @@ const handelDeleteAds = async ()=>{
   const onSubmit = async (data) => {
     try {
       let response = await axios.put(`${baseUrl}/admin/ads/${adsId}`, data , {
-        headers: authorization,
+        headers: {authorization},
       })
       getToastValue('success', response.data.message)
       handleCloseUpdate()

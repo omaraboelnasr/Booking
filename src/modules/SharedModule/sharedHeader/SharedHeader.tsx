@@ -44,7 +44,7 @@ const SharedHeader = ({ type, butn }) => {
     const getRooms = async () => {
         try {
             let response = await axios.get(`${baseUrl}/admin/rooms?page=1&size=100`, {
-                headers: authorization,
+                headers: {authorization},
             })
             setRooms(response.data.data.rooms)
         } catch (error) {
@@ -55,7 +55,7 @@ const SharedHeader = ({ type, butn }) => {
     const handelAddFacility = async(data)=>{
         try {
             let response = await axios.post(`${baseUrl}/admin/room-facilities`, data, {
-                headers: authorization,
+                headers: {authorization},
             })
             toast.success(response.data.message, {
                 autoClose: 3000,
@@ -77,7 +77,7 @@ const SharedHeader = ({ type, butn }) => {
         if (type === 'Facilities') {
             try {
                 let response = await axios.post(`${baseUrl}/admin/room-facilities`, data, {
-                    headers: authorization,
+                    headers: {authorization},
                 })
                 toast.success(response.data.message, {
                     autoClose: 3000,
@@ -97,7 +97,7 @@ const SharedHeader = ({ type, butn }) => {
             data.isActive = !!active;
             try {
                 let response = await axios.post(`${baseUrl}/admin/ads`, data, {
-                    headers: authorization,
+                    headers: {authorization},
 
                 })
                 toast.success(response.data.message, {

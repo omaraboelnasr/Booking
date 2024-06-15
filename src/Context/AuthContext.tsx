@@ -1,29 +1,26 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import {jwtDecode} from "jwt-decode";
 import { DecodedToken} from "../Interfaces/Interfaces"; 
+import { ApiContext } from "./ApiContext";
 
 
 export const AuthContext = createContext(null);
 
 export default function AuthContextProvider(props) {
   const [loginData, setLoginData] = useState(null);
+  const {authorization}=useContext(ApiContext)
 
-  const saveLoginData = () => {
-    const encodedToken = localStorage.getItem("token");
-    if (encodedToken) {
-        const decodedToken = jwtDecode<DecodedToken>(encodedToken);
+  useEffect(() => {
+    if (authorization) {
+        const decodedToken = jwtDecode<DecodedToken>(authorization);
         localStorage.setItem('userData' , JSON.stringify(decodedToken))
       setLoginData(decodedToken);
     }
-  };
-
-  useEffect(() => {
-    saveLoginData();
-  }, []);
+  }, [authorization]);
 
   return (
     <AuthContext.Provider
-      value={{ loginData, saveLoginData }}
+      value={{ loginData }}
     >
       {props.children}
     </AuthContext.Provider>

@@ -97,7 +97,7 @@ export default function FacilitiesList() {
     try{
       const response = await axios.get(`${baseUrl}/admin/room-facilities`,
       {
-          headers: authorization
+          headers: {authorization}
       })
       setFacilitiesList(response.data.data.facilities)
       console.log(response);
@@ -110,7 +110,7 @@ const handelDeleteFacility = async ()=>{
   try {
     const response = await axios.delete(`${baseUrl}/admin/room-facilities/${facilId}`,
       {
-        headers: authorization
+        headers: {authorization}
       })
       getToastValue('success', response.data.message)
       handleCloseDelete()
@@ -124,7 +124,7 @@ const handelDeleteFacility = async ()=>{
 const onSubmit = async (data) => {
     try {
       let response = await axios.put(`${baseUrl}/admin/room-facilities/${facilId}`, data, {
-        headers: authorization,
+        headers: {authorization},
       })
       getToastValue('success', response.data.message)
       handleCloseUpdate()

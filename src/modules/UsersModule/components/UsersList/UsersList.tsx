@@ -87,7 +87,7 @@ export default function UsersList() {
   const getUsers = async () => {
     try {
       let response = await axios.get(`${baseUrl}/admin/users?page=${page + 1}&size=${rowsPerPage}`, {
-        headers: authorization,
+        headers: {authorization},
       })
       setUsers(response.data.data.users)
       setCount(response.data.data.totalCount)
@@ -99,7 +99,7 @@ export default function UsersList() {
   const getUserDetails = async (id) => {
     try {
       let response = await axios.get(`${baseUrl}/admin/users/${id}`, {
-        headers: authorization,
+        headers: {authorization},
       })
       setUserDetails(response.data.data.user)
       console.log(response);

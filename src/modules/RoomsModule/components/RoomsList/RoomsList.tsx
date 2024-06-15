@@ -105,7 +105,7 @@ export default function RoomsList() {
     try {
       const response = await axios.get(`${baseUrl}/admin/rooms?page=${page + 1}&size=${rowsPerPage}`,
         {
-          headers: authorization
+          headers: {authorization}
         })
         console.log(response);
       setRoomsList(response.data.data.rooms)
@@ -119,7 +119,7 @@ export default function RoomsList() {
     try {
       const response = await axios.delete(`${baseUrl}/admin/rooms/${roomId}`,
         {
-          headers: authorization
+          headers: {authorization}
         })
         getToastValue('success', response.data.message)
         handleCloseDelete()

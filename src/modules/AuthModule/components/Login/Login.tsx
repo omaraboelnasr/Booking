@@ -20,8 +20,8 @@ import { UserInfoContext } from "../../../../Context/UserInfoContext";
 
 export default function Login() {
   const { saveLoginData } = useContext(AuthContext);
-  const { userInfoData,getUserInfo } = useContext(UserInfoContext);
-
+  const { userInfoData, getUserInfo } = useContext(UserInfoContext);
+  const {authorization,setAuthorization}=useContext(ApiContext)
   const { register, handleSubmit, formState: { errors, isDirty, isValid } } = useForm()
 
   const navigate = useNavigate()
@@ -32,8 +32,7 @@ export default function Login() {
     try {
       const response = await axios.post(`${baseUrl}/admin/users/login`, data)
       localStorage.setItem('token', response.data.data.token)
-      saveLoginData()
-      await getUserInfo()
+      setAuthorization(response.data.data.token)
       toast.success(response.data.message || 'Logged in successfully', {
         autoClose: 3000,
         hideProgressBar: true,
@@ -49,9 +48,9 @@ export default function Login() {
     }
   }
 
-  useEffect(()=>{
-    
-  },[])
+  useEffect(() => {
+
+  }, [])
   return (
     <Box>
       <Grid container className="login-grid" spacing={0}>

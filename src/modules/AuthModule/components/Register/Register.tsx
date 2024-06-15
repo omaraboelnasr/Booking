@@ -24,6 +24,7 @@ import './Register.css'
 import { Link, useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { AuthContext } from '../../../../Context/AuthContext';
+import { ApiContext } from '../../../../Context/ApiContext';
 
 
 
@@ -31,7 +32,7 @@ import { AuthContext } from '../../../../Context/AuthContext';
 
 export default function Register() {
 
-  const {baseUrl}=useContext(AuthContext);
+  const {baseUrl}=useContext(ApiContext);
   const navigate = useNavigate();
 
 const [showPassword,setShowPassword]=useState(false);
@@ -76,10 +77,9 @@ const appendToFormData=(data:FormValues)=>{
     
     try {
       setIsLoading(true);
-      const response = await axios.post (`${baseUrl}/api/v0/admin/users`,formdata
+      const response = await axios.post (`${baseUrl}/admin/users`,formdata
         
       );
-      console.log(response);
       navigate("/login");
       toast.success("Sign Up !");
     } catch (error) {

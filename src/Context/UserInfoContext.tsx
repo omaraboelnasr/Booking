@@ -15,7 +15,7 @@ export default function UserInfoContextProvider(props) {
                 try {
                     const response = await axios.get(`${baseUrl}/admin/users/${loginData?._id}`,
                         {
-                            headers: authorization
+                            headers: {authorization}
                         })
                         console.log(response);
                     setUserInfoData(response.data.data.user)
